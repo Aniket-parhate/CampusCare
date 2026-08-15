@@ -21,9 +21,9 @@ const features = [
   },
   {
     icon: "🔔",
-    title: "Instant Notifications",
+    title: "Status Feature",
     description:
-      "Receive notifications whenever the status of your complaint changes.",
+      "Receive the status of that perticular problem raised by you.",
   },
   {
     icon: "👨‍💼",

@@ -26,7 +26,7 @@ const Login = () => {
     setLoading(true);
 
     try {
-      const response = await fetch("http://localhost:3000/user/login", {
+      const response = await fetch("http://localhost:3000/staff/login", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -40,10 +40,10 @@ const Login = () => {
         throw new Error(data.message || "Login failed");
       }
 
-      localStorage.setItem("token", data.token);
-      localStorage.setItem("user", JSON.stringify(data.user));
+      localStorage.setItem("staffToken", data.token);
+      localStorage.setItem("staff", JSON.stringify(data.staff));
 
-      navigate("/");
+      navigate("/dashboard");
     } catch (error) {
       setError(error.message);
     } finally {
@@ -54,7 +54,7 @@ const Login = () => {
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50/30 to-white px-5 py-10">
 
-      <div className="mx-auto flex min-h-[calc(100vh-80px)] max-w-md items-center justify-center">
+      <div className="mx-auto flex min-h-screen max-w-md items-center justify-center">
 
         <div className="w-full rounded-3xl border border-slate-200 bg-white p-7 shadow-[0_20px_60px_-25px_rgba(15,23,42,0.2)] sm:p-9">
 
@@ -65,11 +65,11 @@ const Login = () => {
             </div>
 
             <h1 className="text-2xl font-extrabold tracking-tight text-slate-900">
-              Welcome Back
+              Staff Login
             </h1>
 
             <p className="mt-2 text-sm text-slate-500">
-              Login to your CampusCare account
+              Login to manage your campus complaints
             </p>
 
           </div>
@@ -92,7 +92,7 @@ const Login = () => {
                 name="email"
                 value={formData.email}
                 onChange={handleChange}
-                placeholder="Enter your email"
+                placeholder="Enter your staff email"
                 required
                 className="w-full rounded-xl border border-slate-200 bg-slate-50 px-4 py-3 text-sm text-slate-900 outline-none transition focus:border-blue-500 focus:bg-white focus:ring-4 focus:ring-blue-500/10"
               />
@@ -125,21 +125,14 @@ const Login = () => {
           </form>
 
           <p className="mt-7 text-center text-sm text-slate-500">
-            Don't have an account?{" "}
+            Don't have a staff account?{" "}
             <Link
               to="/register"
-              className="font-semibold text-blue-600 hover:text-blue-700"
+              className="font-semibold text-blue-600 transition hover:text-blue-700"
             >
-              Sign Up
+              Register
             </Link>
           </p>
-
-          <Link
-            to="/"
-            className="mt-5 block text-center text-sm font-medium text-slate-400 transition hover:text-slate-600"
-          >
-            ← Back to Home
-          </Link>
 
         </div>
 

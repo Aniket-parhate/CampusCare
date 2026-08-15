@@ -17,7 +17,7 @@ const CTA = () => {
         </h2>
 
         <p className="mx-auto mt-4 max-w-xl text-base leading-7 text-blue-100 sm:text-lg">
-          Don't wait. Report it and help make your campus better.
+          Don't wait. Report it and help make your campus better
         </p>
 
         <Link

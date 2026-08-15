@@ -12,9 +12,8 @@ const registerUser = async (req, res) => {
             collegeCode
         } = req.body;
 
-        // Find college using college code
         const existingCollege = await College.findOne({
-            college: collegeCode
+            code: collegeCode
         });
 
         if (!existingCollege) {
@@ -23,7 +22,6 @@ const registerUser = async (req, res) => {
             });
         }
 
-        // Check if user already exists
         const existingUser = await User.findOne({ email });
 
         if (existingUser) {
@@ -32,10 +30,8 @@ const registerUser = async (req, res) => {
             });
         }
 
-        // Hash password
         const hashedPassword = await bcrypt.hash(password, 10);
 
-        // Create user
         const user = await User.create({
             name,
             email,

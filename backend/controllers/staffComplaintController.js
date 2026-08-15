@@ -17,22 +17,18 @@ const getCollegeComplaints = async (req, res) => {
             college: req.account.college
         };
 
-        // Filter by status
         if (status) {
             query.status = status;
         }
 
-        // Filter by priority
         if (priority) {
             query.priority = priority;
         }
 
-        // Filter by category
         if (category) {
             query.category = category;
         }
 
-        // Search by title or location
         if (search) {
             query.$or = [
                 {
@@ -50,7 +46,6 @@ const getCollegeComplaints = async (req, res) => {
             ];
         }
 
-        // Pagination
         const pageNumber = Math.max(Number(page), 1);
         const limitNumber = Math.max(Number(limit), 1);
         const skip = (pageNumber - 1) * limitNumber;
@@ -81,6 +76,8 @@ const getCollegeComplaints = async (req, res) => {
         });
 
     } catch (error) {
+        console.error("GET COLLEGE COMPLAINTS ERROR:", error);
+
         res.status(500).json({
             message: "Server error",
             error: error.message
@@ -109,6 +106,8 @@ const getComplaintById = async (req, res) => {
         });
 
     } catch (error) {
+        console.error("GET COMPLAINT ERROR:", error);
+
         res.status(500).json({
             message: "Server error",
             error: error.message
@@ -117,10 +116,14 @@ const getComplaintById = async (req, res) => {
 };
 
 
-// Update complaint status
-const updateComplaintStatus = async (req, res) => {
+// Update complaint
+const updateComplaint = async (req, res) => {
     try {
-        const { status } = req.body;
+        const {
+            status,
+            priority,
+            resolution
+        } = req.body;
 
         const allowedStatuses = [
             "Pending",
@@ -130,9 +133,22 @@ const updateComplaintStatus = async (req, res) => {
             "Closed"
         ];
 
-        if (!allowedStatuses.includes(status)) {
+        const allowedPriorities = [
+            "Low",
+            "Medium",
+            "High",
+            "Critical"
+        ];
+
+        if (status && !allowedStatuses.includes(status)) {
             return res.status(400).json({
                 message: "Invalid status"
+            });
+        }
+
+        if (priority && !allowedPriorities.includes(priority)) {
+            return res.status(400).json({
+                message: "Invalid priority"
             });
         }
 
@@ -147,16 +163,30 @@ const updateComplaintStatus = async (req, res) => {
             });
         }
 
-        complaint.status = status;
+        if (status !== undefined) {
+            complaint.status = status;
+        }
+
+        if (priority !== undefined) {
+            complaint.priority = priority;
+        }
+
+        if (resolution !== undefined) {
+            complaint.resolution = resolution || null;
+        }
 
         await complaint.save();
 
+        await complaint.populate("createdBy", "name email");
+
         res.status(200).json({
-            message: "Complaint status updated successfully",
+            message: "Complaint updated successfully",
             complaint
         });
 
     } catch (error) {
+        console.error("UPDATE COMPLAINT ERROR:", error);
+
         res.status(500).json({
             message: "Server error",
             error: error.message
@@ -192,12 +222,16 @@ const resolveComplaint = async (req, res) => {
 
         await complaint.save();
 
+        await complaint.populate("createdBy", "name email");
+
         res.status(200).json({
             message: "Complaint resolved successfully",
             complaint
         });
 
     } catch (error) {
+        console.error("RESOLVE COMPLAINT ERROR:", error);
+
         res.status(500).json({
             message: "Server error",
             error: error.message
@@ -209,6 +243,6 @@ const resolveComplaint = async (req, res) => {
 module.exports = {
     getCollegeComplaints,
     getComplaintById,
-    updateComplaintStatus,
+    updateComplaint,
     resolveComplaint
 };

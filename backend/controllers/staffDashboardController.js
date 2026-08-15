@@ -1,3 +1,4 @@
+
 const Complaint = require("../models/complaintSchema");
 
 const getStaffDashboard = async (req, res) => {
@@ -8,54 +9,35 @@ const getStaffDashboard = async (req, res) => {
             college: collegeId
         });
 
-        const pending = await Complaint.countDocuments({
+        const pendingComplaints = await Complaint.countDocuments({
             college: collegeId,
             status: "Pending"
         });
 
-        const assigned = await Complaint.countDocuments({
-            college: collegeId,
-            status: "Assigned"
-        });
-
-        const inProgress = await Complaint.countDocuments({
+        const inProgressComplaints = await Complaint.countDocuments({
             college: collegeId,
             status: "In Progress"
         });
 
-        const resolved = await Complaint.countDocuments({
+        const resolvedComplaints = await Complaint.countDocuments({
             college: collegeId,
             status: "Resolved"
         });
 
-        const closed = await Complaint.countDocuments({
-            college: collegeId,
-            status: "Closed"
-        });
-
-        const critical = await Complaint.countDocuments({
-            college: collegeId,
-            priority: "Critical"
-        });
-
-        const highPriority = await Complaint.countDocuments({
-            college: collegeId,
-            priority: "High"
-        });
+        const recentComplaints = await Complaint.find({
+            college: collegeId
+        })
+            .populate("createdBy", "name email")
+            .sort({ createdAt: -1 })
+            .limit(10);
 
         res.status(200).json({
-            message: "Staff dashboard data fetched successfully",
-
-            dashboard: {
-                totalComplaints,
-                pending,
-                assigned,
-                inProgress,
-                resolved,
-                closed,
-                critical,
-                highPriority
-            }
+            message: "Staff dashboard fetched successfully",
+            totalComplaints,
+            pendingComplaints,
+            inProgressComplaints,
+            resolvedComplaints,
+            recentComplaints
         });
 
     } catch (error) {
@@ -69,3 +51,4 @@ const getStaffDashboard = async (req, res) => {
 module.exports = {
     getStaffDashboard
 };
+

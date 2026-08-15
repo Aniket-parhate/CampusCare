@@ -12,13 +12,24 @@ const createComplaint = async (req, res) => {
 
         const user = req.account;
 
+        if (!user) {
+            return res.status(401).json({
+                message: "User not authenticated"
+            });
+        }
+
+        if (!user.college) {
+            return res.status(400).json({
+                message: "User is not associated with a college"
+            });
+        }
+
         const complaint = await Complaint.create({
             title,
             description,
             category,
             location,
             priority,
-
             createdBy: user._id,
             college: user.college
         });
@@ -29,13 +40,14 @@ const createComplaint = async (req, res) => {
         });
 
     } catch (error) {
+        console.error("CREATE COMPLAINT ERROR:", error);
+
         res.status(500).json({
             message: "Server error",
             error: error.message
         });
     }
 };
-
 
 const getMyComplaints = async (req, res) => {
     try {
@@ -52,13 +64,14 @@ const getMyComplaints = async (req, res) => {
         });
 
     } catch (error) {
+        console.error("GET COMPLAINTS ERROR:", error);
+
         res.status(500).json({
             message: "Server error",
             error: error.message
         });
     }
 };
-
 
 module.exports = {
     createComplaint,

@@ -37,9 +37,9 @@ const Hero = () => {
 
           <div className="max-w-xl">
 
-            <div className="mb-4 inline-flex items-center gap-2 rounded-full bg-blue-100 px-3 py-1.5 text-xs font-semibold text-blue-700">
+            <div className="animate-float-small mb-4 inline-flex items-center gap-2 rounded-full bg-blue-100 px-3 py-1.5 text-xs font-semibold text-blue-700">
               <span>🚀</span>
-              <span>Smart Campus Solution</span>
+              <span>Smart Care Solution</span>
             </div>
 
             <h1 className="text-4xl font-extrabold leading-[1.08] tracking-tight text-slate-900 sm:text-5xl lg:text-[52px]">
@@ -124,7 +124,7 @@ const Hero = () => {
 
             <div className="absolute inset-5 rounded-3xl bg-blue-200/30 blur-3xl" />
 
-            <div className="relative rounded-3xl border border-slate-200/80 bg-white p-4 shadow-[0_18px_50px_-25px_rgba(15,23,42,0.22)] sm:p-5">
+           <div className="animate-float relative rounded-3xl border border-slate-200/80 bg-white p-4 shadow-[0_25px_60px_-25px_rgba(15,23,42,0.25)] sm:p-5">
 
               <div className="flex items-center justify-between">
 
